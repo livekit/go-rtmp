@@ -238,14 +238,14 @@ func (cs *ChunkStreamer) readChunk() (*ChunkStreamReader, error) {
 		// DO NOTHING
 
 	default:
-		panic("unsupported chunk") // TODO: fix
+		return nil, errors.New("unsupported chunk")
 	}
 
 	//cs.logger.Debugf("(READ) MessageLength = %d, Current = %d", reader.messageLength, reader.buf.Len())
 
 	expectLen := int(reader.messageLength) - reader.buf.Len()
 	if expectLen <= 0 {
-		panic("invalid state") // TODO fix
+		return nil, errors.Errorf("message length (%d) higher than buffer size (%d)", reader.messageLength, reader.buf.Len())
 	}
 
 	if uint32(expectLen) > cs.peerState.chunkSize {
