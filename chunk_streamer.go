@@ -235,8 +235,7 @@ func (cs *ChunkStreamer) readChunk() (*ChunkStreamReader, error) {
 		reader.timestampDelta = mh.timestampDelta
 
 	case 3:
-		reader.timestamp = mh.timestamp
-		reader.timestampDelta = mh.timestampDelta
+		// DO NOTHING
 
 	default:
 		return nil, errors.New("unsupported chunk")
