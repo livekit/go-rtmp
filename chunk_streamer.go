@@ -200,12 +200,6 @@ func (cs *ChunkStreamer) readChunk() (*ChunkStreamReader, error) {
 	}
 	//cs.logger.Debugf("(READ) BasicHeader = %+v", bh)
 
-	var mh chunkMessageHeader
-	if err := decodeChunkMessageHeader(cs.r, bh.fmt, cs.cacheBuffer, &mh); err != nil {
-		return nil, err
-	}
-	//cs.logger.Debugf("(READ) MessageHeader = %+v", mh)
-
 	reader, err := cs.prepareChunkReader(bh.chunkStreamID)
 	if err != nil {
 		return nil, errors.Wrapf(err, "Failed to prepare chunk reader")
@@ -214,6 +208,12 @@ func (cs *ChunkStreamer) readChunk() (*ChunkStreamReader, error) {
 		reader.buf.Reset()
 		reader.completed = false
 	}
+
+	var mh chunkMessageHeader
+	if err := decodeChunkMessageHeader(cs.r, bh.fmt, cs.cacheBuffer, &mh, reader.messageHeader); err != nil {
+		return nil, err
+	}
+	//cs.logger.Debugf("(READ) MessageHeader = %+v", mh)
 
 	reader.basicHeader = bh
 	reader.messageHeader = mh
