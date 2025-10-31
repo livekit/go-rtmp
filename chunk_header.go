@@ -81,14 +81,26 @@ func encodeChunkBasicHeader(w io.Writer, mh *chunkBasicHeader) error {
 }
 
 type chunkMessageHeader struct {
-	timestamp       uint32 // fmt = 0
-	timestampDelta  uint32 // fmt = 1 | 2
-	messageLength   uint32 // fmt = 0 | 1
-	messageTypeID   byte   // fmt = 0 | 1
-	messageStreamID uint32 // fmt = 0
+	timestamp                     uint32 // fmt = 0
+	extendedTimestampPresent      bool   // fmt = 0
+	extendedTimestampDeltaPresent bool   // fmt = 1 | 2
+	timestampDelta                uint32 // fmt = 1 | 2
+	messageLength                 uint32 // fmt = 0 | 1
+	messageTypeID                 byte   // fmt = 0 | 1
+	messageStreamID               uint32 // fmt = 0
 }
 
-func decodeChunkMessageHeader(r io.Reader, fmt byte, buf []byte, mh *chunkMessageHeader) error {
+func getExtendedTimestamp(r io.Reader, cache32bits []byte) (uint32, error) {
+	_, err := io.ReadAtLeast(r, cache32bits, 4)
+	if err != nil {
+		return 0, err
+	}
+	timestamp := binary.BigEndian.Uint32(cache32bits)
+
+	return timestamp, nil
+}
+
+func decodeChunkMessageHeader(r io.Reader, fmt byte, buf []byte, mh *chunkMessageHeader, prevMh chunkMessageHeader) error {
 	if buf == nil || len(buf) < 11 {
 		buf = make([]byte, 11)
 	}
@@ -108,11 +120,14 @@ func decodeChunkMessageHeader(r io.Reader, fmt byte, buf []byte, mh *chunkMessag
 		mh.messageStreamID = binary.LittleEndian.Uint32(buf[7:11]) // 32bits
 
 		if mh.timestamp == 0xffffff {
-			_, err := io.ReadAtLeast(r, cache32bits, 4)
+			mh.extendedTimestampPresent = true
+
+			ts, err := getExtendedTimestamp(r, cache32bits)
 			if err != nil {
 				return err
 			}
-			mh.timestamp = binary.BigEndian.Uint32(cache32bits)
+
+			mh.timestamp = ts
 		}
 
 	case 1:
@@ -127,11 +142,14 @@ func decodeChunkMessageHeader(r io.Reader, fmt byte, buf []byte, mh *chunkMessag
 		mh.messageTypeID = buf[6] // 8bits
 
 		if mh.timestampDelta == 0xffffff {
-			_, err := io.ReadAtLeast(r, cache32bits, 4)
+			mh.extendedTimestampDeltaPresent = true
+
+			ts, err := getExtendedTimestamp(r, cache32bits)
 			if err != nil {
 				return err
 			}
-			mh.timestampDelta = binary.BigEndian.Uint32(cache32bits)
+
+			mh.timestampDelta = ts
 		}
 
 	case 2:
@@ -143,15 +161,39 @@ func decodeChunkMessageHeader(r io.Reader, fmt byte, buf []byte, mh *chunkMessag
 		mh.timestampDelta = binary.BigEndian.Uint32(cache32bits)
 
 		if mh.timestampDelta == 0xffffff {
-			_, err := io.ReadAtLeast(r, cache32bits, 4)
+			mh.extendedTimestampDeltaPresent = true
+
+			ts, err := getExtendedTimestamp(r, cache32bits)
 			if err != nil {
 				return err
 			}
-			mh.timestampDelta = binary.BigEndian.Uint32(cache32bits)
+
+			mh.timestampDelta = ts
 		}
 
 	case 3:
-		// DO NOTHING
+		mh.timestamp = prevMh.timestamp
+		mh.timestampDelta = prevMh.timestampDelta
+
+		if prevMh.extendedTimestampPresent || prevMh.extendedTimestampDeltaPresent {
+			// If the first chunk of the message had an extended header,
+			// subsequent fmt = 3 chunks start with an extended timestamp as well
+			// (https://rtmp.veriskope.com/docs/spec/#5313-extended-timestamp)
+			mh.extendedTimestampPresent = prevMh.extendedTimestampPresent
+			mh.extendedTimestampDeltaPresent = prevMh.extendedTimestampDeltaPresent
+
+			ts, err := getExtendedTimestamp(r, cache32bits)
+			if err != nil {
+				return err
+			}
+
+			if mh.extendedTimestampPresent {
+				mh.timestamp = ts
+			}
+			if prevMh.extendedTimestampDeltaPresent {
+				mh.timestampDelta = ts
+			}
+		}
 
 	default:
 		return errors.New("Unexpected fmt")
