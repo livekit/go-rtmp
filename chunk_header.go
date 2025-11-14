@@ -172,8 +172,8 @@ func decodeChunkMessageHeader(r io.Reader, fmt byte, buf []byte, mh *chunkMessag
 		}
 
 	case 3:
-		mh.timestamp = prevMh.timestamp
-		mh.timestampDelta = prevMh.timestampDelta
+		mh.timestamp = 0
+		mh.timestampDelta = 0
 
 		if prevMh.extendedTimestampPresent || prevMh.extendedTimestampDeltaPresent {
 			// If the first chunk of the message had an extended header,
