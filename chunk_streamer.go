@@ -294,7 +294,8 @@ func (cs *ChunkStreamer) writeChunk(writer *ChunkStreamWriter) (bool, error) {
 		return false, err
 	}
 
-	if _, err := io.CopyN(cs.w, writer, int64(expectLen)); err != nil {
+	if n, err := io.CopyN(cs.w, writer, int64(expectLen)); err != nil {
+		cs.logger.Warnf("chunk writing failed err=%v len=%d", err, n)
 		return false, err
 	}
 	if err := cs.w.Flush(); err != nil {
