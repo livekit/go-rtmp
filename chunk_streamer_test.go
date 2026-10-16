@@ -288,10 +288,10 @@ func TestStreamerChunkExample2(t *testing.T) {
 				{timestamp: 1000, delta: 0, fmt: 3, isComplete: true},
 
 				{timestamp: 1000, delta: 1, fmt: 1, isComplete: false},
-				{timestamp: 1001, delta: 0, fmt: 3, isComplete: true},
+				{timestamp: 1001, delta: 1, fmt: 3, isComplete: true},
 
 				{timestamp: 1001, delta: 999, fmt: 1, isComplete: false},
-				{timestamp: 2000, delta: 0, fmt: 3, isComplete: true},
+				{timestamp: 2000, delta: 999, fmt: 3, isComplete: true},
 
 				{timestamp: 2000, delta: 0, fmt: 1, isComplete: false},
 				{timestamp: 2000, delta: 0, fmt: 3, isComplete: true},
