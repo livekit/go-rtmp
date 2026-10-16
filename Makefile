@@ -1,5 +1,3 @@
-FMT_DIRS:=$(shell go list -f {{.Dir}} ./...)
-
 .PHONY: all
 all: check test
 
@@ -8,8 +6,7 @@ check: fmt lint vet
 
 .PHONY: fmt
 fmt:
-	@gofmt -l -w -s $(FMT_DIRS)
-	@go tool goimports -w $(FMT_DIRS)
+	golangci-lint fmt
 
 .PHONY: lint
 lint:
