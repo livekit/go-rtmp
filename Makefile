@@ -6,11 +6,6 @@ all: check test
 .PHONY: check
 check: fmt lint vet
 
-.PHONY: download-ci-tools
-download-ci-tools:
-	go install golang.org/x/tools/cmd/goimports@latest
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b ./bin v2.14.0
-
 .PHONY: fmt
 fmt:
 	@gofmt -l -w -s $(FMT_DIRS)
@@ -18,7 +13,7 @@ fmt:
 
 .PHONY: lint
 lint:
-	./bin/golangci-lint run
+	golangci-lint run
 
 .PHONY: vet
 vet:
