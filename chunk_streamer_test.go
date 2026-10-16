@@ -392,7 +392,7 @@ func TestChunkStreamerStreamsLimitation(t *testing.T) {
 	streamer := NewChunkStreamer(inbuf, outbuf, &StreamControlStateConfig{
 		MaxChunkStreams: 1,
 	})
-	defer streamer.Close()
+	defer func() { _ = streamer.Close() }()
 
 	{
 		_, err := streamer.prepareChunkReader(0)

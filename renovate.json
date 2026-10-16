@@ -42,6 +42,16 @@
       "minimumReleaseAge": null
     },
     {
+      "description": "Tools are pinned via tool directives in go.mod, which records their modules as indirect requirements; Renovate skips indirect requirements by default",
+      "matchManagers": ["gomod"],
+      "matchDepTypes": ["indirect"],
+      "matchPackageNames": [
+        "github.com/golangci/golangci-lint/v2",
+        "golang.org/x/tools"
+      ],
+      "enabled": true
+    },
+    {
       "description": "Never bump the go/toolchain directives in go.mod: this module is a library, so the go directive is the minimum we ask of consumers and must stay at the lowest version our dependencies require.",
       "matchManagers": ["gomod"],
       "matchDepTypes": ["golang", "toolchain"],

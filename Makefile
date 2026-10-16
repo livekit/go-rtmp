@@ -9,11 +9,11 @@ check: fmt lint vet
 .PHONY: fmt
 fmt:
 	@gofmt -l -w -s $(FMT_DIRS)
-	@goimports -w $(FMT_DIRS)
+	@go tool goimports -w $(FMT_DIRS)
 
 .PHONY: lint
 lint:
-	golangci-lint run
+	go tool golangci-lint run
 
 .PHONY: vet
 vet:

@@ -15,10 +15,14 @@ jobs:
         with:
           go-version-file: go.mod
 
+      - name: Install tools
+        run: go install tool
+
       - name: Lint
         uses: golangci/golangci-lint-action@v9
         with:
-          version: v2.14.0
+          # Use the golangci-lint installed from the tool directive in go.mod
+          install-mode: none
 
       - name: Test
         run: make test

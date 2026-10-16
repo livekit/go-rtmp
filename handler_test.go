@@ -52,7 +52,7 @@ func TestHandlerCallback(t *testing.T) {
 	sconn := newServerConn(conn)
 	go func() {
 		<-closer
-		sconn.Close()
+		_ = sconn.Close()
 	}()
 	_ = sconn.Serve()
 }

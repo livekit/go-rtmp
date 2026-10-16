@@ -38,7 +38,7 @@ func (srv *Server) Serve(l net.Listener) error {
 		return errors.Wrap(err, "Already served")
 	}
 
-	defer l.Close()
+	defer func() { _ = l.Close() }()
 
 	for {
 		rwc, err := l.Accept()
@@ -111,7 +111,7 @@ func (srv *Server) handleConn(conn net.Conn) {
 	sc := &serverConn{
 		conn: c,
 	}
-	defer sc.Close()
+	defer func() { _ = sc.Close() }()
 
 	if err := sc.Serve(); err != nil {
 		if err == io.EOF {
