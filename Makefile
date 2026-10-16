@@ -9,8 +9,7 @@ check: fmt lint vet
 .PHONY: download-ci-tools
 download-ci-tools:
 	go install golang.org/x/tools/cmd/goimports@latest
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b ./bin v1.64.8
-	curl -sSfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b ./bin v0.14.2
+	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b ./bin v2.14.0
 
 .PHONY: fmt
 fmt:
@@ -20,11 +19,6 @@ fmt:
 .PHONY: lint
 lint:
 	./bin/golangci-lint run
-
-.PHONY: lint-ci
-lint-ci:
-	./bin/golangci-lint run | \
-	./bin/reviewdog -f=golangci-lint -reporter=github-pr-review -filter-mode=nofilter
 
 .PHONY: vet
 vet:
