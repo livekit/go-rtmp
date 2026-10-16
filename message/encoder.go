@@ -57,13 +57,13 @@ func (enc *Encoder) Encode(msg Message) error {
 	case *AggregateMessage:
 		return enc.encodeAggregateMessage(msg)
 	default:
-		return fmt.Errorf("Unexpected message type(encode): ID = %d, Type = %T", msg.TypeID(), msg)
+		return fmt.Errorf("unexpected message type(encode): ID = %d, Type = %T", msg.TypeID(), msg)
 	}
 }
 
 func (enc *Encoder) encodeSetChunkSize(m *SetChunkSize) error {
 	if m.ChunkSize < 1 || m.ChunkSize > 0x7fffffff {
-		return fmt.Errorf("Invalid format: chunk size is out of range [1, 0x80000000)")
+		return fmt.Errorf("invalid format: chunk size is out of range [1, 0x80000000)")
 	}
 
 	buf := make([]byte, 4)
@@ -143,7 +143,7 @@ func (enc *Encoder) encodeVideoMessage(m *VideoMessage) error {
 }
 
 func (enc *Encoder) encodeSharedObjectMessageAMF3(m *SharedObjectMessageAMF3) error {
-	return fmt.Errorf("Not implemented: SharedObjectMessageAMF3")
+	return fmt.Errorf("not implemented: SharedObjectMessageAMF3")
 }
 
 func (enc *Encoder) encodeDataMessage(m *DataMessage) error {
@@ -161,7 +161,7 @@ func (enc *Encoder) encodeDataMessage(m *DataMessage) error {
 }
 
 func (enc *Encoder) encodeSharedObjectMessageAMF0(m *SharedObjectMessageAMF0) error {
-	return fmt.Errorf("Not implemented: SharedObjectMessageAMF0")
+	return fmt.Errorf("not implemented: SharedObjectMessageAMF0")
 }
 
 func (enc *Encoder) encodeCommandMessage(m *CommandMessage) error {
@@ -182,5 +182,5 @@ func (enc *Encoder) encodeCommandMessage(m *CommandMessage) error {
 }
 
 func (enc *Encoder) encodeAggregateMessage(m *AggregateMessage) error {
-	return fmt.Errorf("Not implemented: AggregateMessage")
+	return fmt.Errorf("not implemented: AggregateMessage")
 }

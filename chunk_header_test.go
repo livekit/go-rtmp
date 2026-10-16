@@ -146,7 +146,7 @@ func TestChunkBasicHeaderError(t *testing.T) {
 			fmt:           3,
 			chunkStreamID: 65600,
 		})
-		require.EqualError(t, err, "Chunk stream id is out of range: 65600 must be in range [2, 65599]")
+		require.EqualError(t, err, "chunk stream id is out of range: 65600 must be in range [2, 65599]")
 	})
 
 	t.Run("Out of range(under)", func(t *testing.T) {
@@ -155,7 +155,7 @@ func TestChunkBasicHeaderError(t *testing.T) {
 			fmt:           3,
 			chunkStreamID: 1,
 		})
-		require.EqualError(t, err, "Chunk stream id is out of range: 1 must be in range [2, 65599]")
+		require.EqualError(t, err, "chunk stream id is out of range: 1 must be in range [2, 65599]")
 	})
 }
 
