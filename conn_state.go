@@ -10,8 +10,8 @@ package rtmp
 import (
 	"math"
 
-	"github.com/pkg/errors"
 	"github.com/livekit/go-rtmp/message"
+	"github.com/pkg/errors"
 )
 
 const DefaultChunkSize = 128

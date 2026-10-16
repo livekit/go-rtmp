@@ -5,10 +5,10 @@ import (
 	"io"
 	"log"
 
-	"github.com/pkg/errors"
-	flvtag "github.com/yutopp/go-flv/tag"
 	"github.com/livekit/go-rtmp"
 	rtmpmsg "github.com/livekit/go-rtmp/message"
+	"github.com/pkg/errors"
+	flvtag "github.com/yutopp/go-flv/tag"
 )
 
 var _ rtmp.Handler = (*Handler)(nil)

@@ -10,7 +10,6 @@ package message
 import (
 	"bytes"
 	"io"
-	"io/ioutil"
 	"testing"
 
 	"github.com/stretchr/testify/require"
@@ -55,7 +54,7 @@ func assertEqualMessage(t *testing.T, expected, actual Message) {
 }
 
 func assertEqualPayload(t *testing.T, expected, actual io.Reader) {
-	expectedBin, err := ioutil.ReadAll(expected)
+	expectedBin, err := io.ReadAll(expected)
 	require.Nil(t, err)
 	switch p := expected.(type) {
 	case *bytes.Reader:
@@ -67,7 +66,7 @@ func assertEqualPayload(t *testing.T, expected, actual io.Reader) {
 	}
 	require.NotZero(t, len(expectedBin))
 
-	actualBin, err := ioutil.ReadAll(actual)
+	actualBin, err := io.ReadAll(actual)
 	require.Nil(t, err)
 	require.NotZero(t, len(actualBin))
 

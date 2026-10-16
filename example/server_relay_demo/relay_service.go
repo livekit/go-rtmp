@@ -23,7 +23,7 @@ func (s *RelayService) NewPubsub(key string) (*Pubsub, error) {
 	defer s.m.Unlock()
 
 	if _, ok := s.streams[key]; ok {
-		return nil, fmt.Errorf("Already published: %s", key)
+		return nil, fmt.Errorf("already published: %s", key)
 	}
 
 	pubsub := NewPubsub(s, key)
@@ -39,7 +39,7 @@ func (s *RelayService) GetPubsub(key string) (*Pubsub, error) {
 
 	pubsub, ok := s.streams[key]
 	if !ok {
-		return nil, fmt.Errorf("Not published: %s", key)
+		return nil, fmt.Errorf("not published: %s", key)
 	}
 
 	return pubsub, nil
@@ -50,7 +50,7 @@ func (s *RelayService) RemovePubsub(key string) error {
 	defer s.m.Unlock()
 
 	if _, ok := s.streams[key]; !ok {
-		return fmt.Errorf("Not published: %s", key)
+		return fmt.Errorf("not published: %s", key)
 	}
 
 	delete(s.streams, key)

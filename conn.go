@@ -11,7 +11,6 @@ import (
 	"bufio"
 	"context"
 	"io"
-	"io/ioutil"
 	"sync"
 
 	"github.com/hashicorp/go-multierror"
@@ -73,7 +72,7 @@ func (cb *ConnConfig) normalize() *ConnConfig {
 
 	if c.Logger == nil {
 		l := logrus.New()
-		l.Out = ioutil.Discard
+		l.Out = io.Discard
 
 		c.Logger = l
 	}

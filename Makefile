@@ -1,30 +1,16 @@
-FMT_DIRS:=$(shell go list -f {{.Dir}} ./...)
-
 .PHONY: all
 all: check test
 
 .PHONY: check
 check: fmt lint vet
 
-.PHONY: download-ci-tools
-download-ci-tools:
-	go install golang.org/x/tools/cmd/goimports@latest
-	curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s v1.53.1
-	curl -sSfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s v0.14.2
-
 .PHONY: fmt
 fmt:
-	@gofmt -l -w -s $(FMT_DIRS)
-	@goimports -w $(FMT_DIRS)
+	golangci-lint fmt
 
 .PHONY: lint
 lint:
-	./bin/golangci-lint run
-
-.PHONY: lint-ci
-lint-ci:
-	./bin/golangci-lint run | \
-	./bin/reviewdog -f=golangci-lint -reporter=github-pr-review -filter-mode=nofilter
+	golangci-lint run
 
 .PHONY: vet
 vet:

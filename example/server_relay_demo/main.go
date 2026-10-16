@@ -4,8 +4,8 @@ import (
 	"io"
 	"net"
 
-	log "github.com/sirupsen/logrus"
 	"github.com/livekit/go-rtmp"
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {

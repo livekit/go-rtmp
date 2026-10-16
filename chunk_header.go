@@ -21,7 +21,7 @@ type chunkBasicHeader struct {
 }
 
 func decodeChunkBasicHeader(r io.Reader, buf []byte, bh *chunkBasicHeader) error {
-	if buf == nil || len(buf) < 3 {
+	if len(buf) < 3 {
 		buf = make([]byte, 3)
 	}
 
@@ -76,7 +76,7 @@ func encodeChunkBasicHeader(w io.Writer, mh *chunkBasicHeader) error {
 		return err
 
 	default:
-		return fmt.Errorf("Chunk stream id is out of range: %d must be in range [2, 65599]", mh.chunkStreamID)
+		return fmt.Errorf("chunk stream id is out of range: %d must be in range [2, 65599]", mh.chunkStreamID)
 	}
 }
 
@@ -101,7 +101,7 @@ func getExtendedTimestamp(r io.Reader, cache32bits []byte) (uint32, error) {
 }
 
 func decodeChunkMessageHeader(r io.Reader, fmt byte, buf []byte, mh *chunkMessageHeader, prevMh chunkMessageHeader) error {
-	if buf == nil || len(buf) < 11 {
+	if len(buf) < 11 {
 		buf = make([]byte, 11)
 	}
 	cache32bits := make([]byte, 4)

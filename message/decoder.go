@@ -64,7 +64,7 @@ func (dec *Decoder) Decode(typeID TypeID, msg *Message) error {
 	case TypeIDAggregateMessage:
 		return dec.decodeAggregateMessage(msg)
 	default:
-		return fmt.Errorf("Unexpected message type(decode): ID = %d", typeID)
+		return fmt.Errorf("unexpected message type(decode): ID = %d", typeID)
 	}
 }
 
@@ -80,11 +80,11 @@ func (dec *Decoder) decodeSetChunkSize(msg *Message) error {
 	chunkSize := total & 0x7fffffff   // 0b0111,1111...
 
 	if bit != 0 {
-		return fmt.Errorf("Invalid format: bit must be 0")
+		return fmt.Errorf("invalid format: bit must be 0")
 	}
 
 	if chunkSize == 0 {
-		return fmt.Errorf("Invalid format: chunk size is 0")
+		return fmt.Errorf("invalid format: chunk size is 0")
 	}
 
 	*msg = &SetChunkSize{
@@ -188,15 +188,15 @@ func (dec *Decoder) decodeVideoMessage(msg *Message) error {
 }
 
 func (dec *Decoder) decodeDataMessageAMF3(msg *Message) error {
-	return fmt.Errorf("Not implemented: DataMessageAMF3")
+	return fmt.Errorf("not implemented: DataMessageAMF3")
 }
 
 func (dec *Decoder) decodeSharedObjectMessageAMF3(msg *Message) error {
-	return fmt.Errorf("Not implemented: SharedObjectMessageAMF3")
+	return fmt.Errorf("not implemented: SharedObjectMessageAMF3")
 }
 
 func (dec *Decoder) decodeCommandMessageAMF3(msg *Message) error {
-	return fmt.Errorf("Not implemented: CommandMessageAMF3")
+	return fmt.Errorf("not implemented: CommandMessageAMF3")
 }
 
 func (dec *Decoder) decodeDataMessageAMF0(msg *Message) error {
@@ -210,7 +210,7 @@ func (dec *Decoder) decodeDataMessageAMF0(msg *Message) error {
 }
 
 func (dec *Decoder) decodeSharedObjectMessageAMF0(msg *Message) error {
-	return fmt.Errorf("Not implemented: SharedObjectMessageAMF0")
+	return fmt.Errorf("not implemented: SharedObjectMessageAMF0")
 }
 
 func (dec *Decoder) decodeCommandMessageAMF0(msg *Message) error {
@@ -224,7 +224,7 @@ func (dec *Decoder) decodeCommandMessageAMF0(msg *Message) error {
 }
 
 func (dec *Decoder) decodeAggregateMessage(msg *Message) error {
-	return fmt.Errorf("Not implemented: AggregateMessage")
+	return fmt.Errorf("not implemented: AggregateMessage")
 }
 
 func (dec *Decoder) decodeDataMessage(msg *Message, f func(r io.Reader) (AMFDecoder, EncodingType)) error {

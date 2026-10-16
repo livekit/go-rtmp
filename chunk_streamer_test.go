@@ -12,7 +12,7 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"strings"
 	"testing"
 	"time"
@@ -69,7 +69,7 @@ func TestStreamerSingleChunk(t *testing.T) {
 	// check message
 	require.Equal(t, actualMsg.TypeID(), msg.TypeID())
 	actualMsgT := actualMsg.(*message.VideoMessage)
-	actualContent, _ := ioutil.ReadAll(actualMsgT.Payload)
+	actualContent, _ := io.ReadAll(actualMsgT.Payload)
 	require.Equal(t, actualContent, videoContent)
 }
 
@@ -125,7 +125,7 @@ func TestStreamerMultipleChunk(t *testing.T) {
 	// check message
 	require.Equal(t, actualMsg.TypeID(), msg.TypeID())
 	actualMsgT := actualMsg.(*message.VideoMessage)
-	actualContent, _ := ioutil.ReadAll(actualMsgT.Payload)
+	actualContent, _ := io.ReadAll(actualMsgT.Payload)
 	require.Equal(t, actualContent, videoContent)
 }
 
@@ -288,10 +288,10 @@ func TestStreamerChunkExample2(t *testing.T) {
 				{timestamp: 1000, delta: 0, fmt: 3, isComplete: true},
 
 				{timestamp: 1000, delta: 1, fmt: 1, isComplete: false},
-				{timestamp: 1001, delta: 0, fmt: 3, isComplete: true},
+				{timestamp: 1001, delta: 1, fmt: 3, isComplete: true},
 
 				{timestamp: 1001, delta: 999, fmt: 1, isComplete: false},
-				{timestamp: 2000, delta: 0, fmt: 3, isComplete: true},
+				{timestamp: 2000, delta: 999, fmt: 3, isComplete: true},
 
 				{timestamp: 2000, delta: 0, fmt: 1, isComplete: false},
 				{timestamp: 2000, delta: 0, fmt: 3, isComplete: true},
@@ -414,7 +414,7 @@ func TestChunkStreamerStreamsLimitation(t *testing.T) {
 func TestChunkStreamerDualWriter(t *testing.T) {
 	buf := new(bytes.Buffer)
 	inbuf := bufio.NewReaderSize(buf, 2048)
-	outbuf := bufio.NewWriterSize(ioutil.Discard, 2048)
+	outbuf := bufio.NewWriterSize(io.Discard, 2048)
 
 	streamer := NewChunkStreamer(inbuf, outbuf, nil)
 
@@ -448,7 +448,7 @@ func TestChunkStreamerDualWriter(t *testing.T) {
 func TestChunkStreamerDualWriterWithoutWaiting(t *testing.T) {
 	buf := new(bytes.Buffer)
 	inbuf := bufio.NewReaderSize(buf, 2048)
-	outbuf := bufio.NewWriterSize(ioutil.Discard, 2048)
+	outbuf := bufio.NewWriterSize(io.Discard, 2048)
 
 	streamer := NewChunkStreamer(inbuf, outbuf, nil)
 
@@ -480,7 +480,7 @@ func TestChunkStreamerDualWriterWithoutWaiting(t *testing.T) {
 func TestChunkStreamerNewChunkWriterTwice(t *testing.T) {
 	buf := new(bytes.Buffer)
 	inbuf := bufio.NewReaderSize(buf, 2048)
-	outbuf := bufio.NewWriterSize(ioutil.Discard, 2048)
+	outbuf := bufio.NewWriterSize(io.Discard, 2048)
 
 	streamer := NewChunkStreamer(inbuf, outbuf, nil)
 
