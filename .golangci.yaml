@@ -2,3 +2,7 @@ version: "2"
 linters:
   enable:
     - nilerr
+  exclusions:
+    presets:
+      # Don't require checking errors from Close, Flush, print-style calls, etc.
+      - std-error-handling

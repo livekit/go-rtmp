@@ -18,7 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to dial: %+v", err)
 	}
-	defer func() { _ = client.Close() }()
+	defer client.Close()
 	log.Infof("Client created")
 
 	if err := client.Connect(nil); err != nil {
@@ -30,7 +30,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to create stream: Err=%+v", err)
 	}
-	defer func() { _ = stream.Close() }()
+	defer stream.Close()
 
 	if err := stream.Publish(&rtmpmsg.NetStreamPublish{
 		PublishingName: "testtesttesttest",

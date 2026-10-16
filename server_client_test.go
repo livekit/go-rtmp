@@ -94,7 +94,7 @@ func TestServerCanAcceptCreateStream(t *testing.T) {
 
 		s0, err := c.CreateStream(nil, chunkSize)
 		require.Nil(t, err)
-		defer func() { _ = s0.Close() }()
+		defer s0.Close()
 
 		// Rejected because a number of message streams is exceeded the limits
 		s1, err := c.CreateStream(nil, chunkSize)
@@ -104,7 +104,7 @@ func TestServerCanAcceptCreateStream(t *testing.T) {
 				StreamID: 0,
 			},
 		}, err)
-		defer func() { _ = s1.Close() }()
+		defer s1.Close()
 	})
 }
 
@@ -127,7 +127,7 @@ func TestServerCanAcceptDeleteStream(t *testing.T) {
 
 		s0, err := c.CreateStream(nil, chunkSize)
 		require.NoError(t, err)
-		defer func() { _ = s0.Close() }()
+		defer s0.Close()
 
 		t.Run("Cannot delete a stream which does not exist", func(t *testing.T) {
 			err = c.DeleteStream(&message.NetStreamDeleteStream{
