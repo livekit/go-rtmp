@@ -9,7 +9,7 @@ require (
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.10.2
 	github.com/stretchr/testify v1.12.1
-	github.com/yutopp/go-amf0 v0.1.0
+	github.com/yutopp/go-amf0 v0.1.1
 	github.com/yutopp/go-flv v0.3.1
 )
 
