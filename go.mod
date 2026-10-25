@@ -4,7 +4,7 @@ go 1.24.0
 
 require (
 	github.com/fortytw2/leaktest v1.2.0
-	github.com/hashicorp/go-multierror v1.1.0
+	github.com/hashicorp/go-multierror v1.1.1
 	github.com/mitchellh/mapstructure v1.5.0
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.10.2
